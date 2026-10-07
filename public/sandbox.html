@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova preview sandbox</title>
+<style>html,body{margin:0;font:14px system-ui,sans-serif;color:#888;display:grid;place-items:center;height:100%}</style>
+</head>
+<body>
+<p>Loading preview…</p>
+<script>
+/* Runs AI-generated code in an isolated, sandboxed frame (opaque origin: no access to Nova's storage, keys or chats). */
+addEventListener('message', function (e) {
+  var d = e.data || {};
+  if (d.type !== 'nova-render' || typeof d.html !== 'string') return;
+  var hook = '<script>(function(){var P=function(k,a){try{parent.postMessage({type:"nova-console",level:k,text:Array.prototype.map.call(a,function(x){try{return typeof x==="object"?JSON.stringify(x):String(x)}catch(_){return String(x)}}).join(" ")},"*")}catch(_){}};' +
+    '["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){P(k,arguments);o.apply(console,arguments)}});' +
+    'addEventListener("error",function(ev){P("error",[ev.message+" (line "+ev.lineno+")"])});addEventListener("unhandledrejection",function(ev){P("error",["Unhandled: "+(ev.reason&&ev.reason.message||ev.reason)])});})();<\/script>';
+  var html = d.html;
+  html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, function (m) { return m + hook; }) : hook + html;
+  document.open(); document.write(html); document.close();
+});
+parent.postMessage({ type: 'nova-sandbox-ready' }, '*');
+</script>
+</body>
+</html>

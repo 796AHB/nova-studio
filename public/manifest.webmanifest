@@ -1,0 +1,30 @@
+{
+  "id": "./",
+  "name": "Nova Studio",
+  "short_name": "Nova",
+  "description": "Your own multi-provider AI studio: chat, images, video, voice, skills and usage tracking.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "background_color": "#0a0c11",
+  "theme_color": "#0a0c11",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "New chat", "url": "./?mode=chat", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Create image", "url": "./?mode=image", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Create video", "url": "./?mode=video", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  }
+}

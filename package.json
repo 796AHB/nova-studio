@@ -1,0 +1,13 @@
+{
+  "name": "nova-studio",
+  "version": "3.0.0",
+  "description": "Bring-your-own-key AI studio PWA: chat, image, video, voice, skills and token usage monitor — with an optional zero-dependency key proxy server.",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "engines": { "node": ">=18.17" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  }
+}

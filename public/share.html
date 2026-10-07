@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0c11">
+<title>Shared chat · Nova Studio</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+  body{overflow:auto;height:auto}
+  .share-wrap{max-width:860px;margin:0 auto;padding:20px 14px 60px}
+  .share-head{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .share-head .logo{width:44px;height:44px;font-size:22px;border-radius:14px;margin:0}
+  .share-head h1{font-size:20px;margin:0}.share-head p{margin:2px 0 0;color:var(--muted);font-size:13px}
+  .share-foot{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  .msg.assistant .meta{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="share-wrap">
+  <div class="share-head"><div class="logo">⚡</div><div><h1 id="sh-title">Loading…</h1><p id="sh-sub">Shared from Nova Studio · read-only</p></div></div>
+  <div id="sh-msgs"></div>
+  <p class="share-foot">Made with ⚡ Nova Studio</p>
+</div>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script type="module" src="/js/share.js"></script>
+</body>
+</html>
