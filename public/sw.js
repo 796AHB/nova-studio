@@ -1,6 +1,6 @@
 /* Nova Studio service worker — offline app shell + cached CDN libraries.
    API calls (provider hosts and /proxy/*) are never cached. Bump VERSION on each release. */
-const VERSION = 'nova-v3.2.1';
+const VERSION = 'nova-v3.2.2';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/app.css',
   './js/app.js', './js/config.js', './js/store.js', './js/usage.js', './js/util.js', './js/files.js', './js/connectors.js',

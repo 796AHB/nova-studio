@@ -1,7 +1,7 @@
 /* Nova Studio — static configuration: providers, voices, skills, prices, context windows.
    Model lists are suggestions only: any model id can be typed in the app. */
 
-export const APP_VERSION = '3.2.1';
+export const APP_VERSION = '3.2.2';
 
 export const PROVIDERS = {
   openai: { name: 'OpenAI', type: 'openai', base: 'https://api.openai.com/v1', link: 'https://platform.openai.com/api-keys', usageOpt: true, env: 'OPENAI_API_KEY',
