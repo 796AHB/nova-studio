@@ -832,7 +832,7 @@ function msgHTML(m) {
   if (m.atts?.length) h += `<div class="atts">${m.atts.map(attHTML).join('')}</div>`;
   if (m.thinking) h += `<details class="think" ${m.pending && !m.text ? 'open' : ''}><summary>💭 ${m.pending && !m.text ? 'Thinking…' : 'Reasoning'}</summary><div class="md">${md(m.thinking)}</div></details>`;
   if (m.tools?.length) h += `<div class="tools">${m.tools.map(toolCardHTML).join('')}</div>`;
-  if (!u && m.pending) h += planStripHTML(runForMsg(convo.id, m.id));
+  if (!u && m.pending) h += planStripHTML(runForMsg(cur?.id, m.id));
   if (m.text) h += u ? `<div class="utext">${esc(m.text).replace(/\n/g, '<br>')}</div>` : `<div class="md">${md(m.text)}</div>`;
   if (m.media?.length) h += `<div class="media">${m.media.map(mediaHTML).join('')}</div>`;
   if (m.sources?.length && !m.pending) h += `<div class="sources"><span>📚</span>${m.sources.map(x => `<button class="chip sm" data-act="source" data-n="${x.n}" title="${esc(x.text.slice(0, 200))}">[${x.n}] ${esc(x.doc)}${x.page ? ' · ' + esc(x.page) : ''}</button>`).join('')}</div>`;
