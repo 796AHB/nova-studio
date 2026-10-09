@@ -43,7 +43,7 @@ export function initLogs() {
 const shortUrl = u => { try { const x = new URL(u, location.href); return x.host + x.pathname.slice(0, 80); } catch { return String(u).slice(0, 80); } };
 
 function report() {
-  return `Nova Studio ${APP_VERSION}\n${navigator.userAgent}\n${new Date().toISOString()}\n\n` +
+  return `AHB Broin ${APP_VERSION}\n${navigator.userAgent}\n${new Date().toISOString()}\n\n` +
     logs.map(l => `[${new Date(l.ts).toISOString()}] ${l.level.toUpperCase()} ${l.msg}${l.detail ? '\n    ' + l.detail.replace(/\n/g, '\n    ') : ''}`).join('\n');
 }
 export function openLogs() {

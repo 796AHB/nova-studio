@@ -1,7 +1,7 @@
 {
-  "name": "nova-studio",
+  "name": "ahb-broin",
   "version": "3.0.0",
-  "description": "Bring-your-own-key AI studio PWA: chat, image, video, voice, skills and token usage monitor — with an optional zero-dependency key proxy server.",
+  "description": "AHB Broin — bring-your-own-key AI studio PWA: chat, image, video, voice, skills and token usage monitor — with an optional zero-dependency key proxy server.",
   "type": "module",
   "license": "MIT",
   "private": true,

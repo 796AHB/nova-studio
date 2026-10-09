@@ -64,7 +64,7 @@ export async function runTask(uid, t) {
       }
     }
     const out = await complete({ provider: t.provider, model: t.model, prompt,
-      system: `You are Nova, running a scheduled task for the user called “${t.name}”. Current date and time: ${when} (${t.tz}). Do the task now and write a clear, well-formatted Markdown result. Do not ask questions back.` });
+      system: `You are Broin, running a scheduled task for the user called “${t.name}”. Current date and time: ${when} (${t.tz}). Do the task now and write a clear, well-formatted Markdown result. Do not ask questions back.` });
     text = out.text || '_(empty response)_'; usage = out.usage;
   } catch (e) { error = e.message; }
   const ts = Date.now(), cid = `task-${t.id}-${ts.toString(36)}`;

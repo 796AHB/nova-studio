@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Nova Studio server — zero dependencies (Node 18.17+).
+/* AHB Broin server — zero dependencies (Node 18.17+).
    • Serves the PWA from ./public
    • /proxy/<provider>/…  AI providers with server-side keys (keys never reach the browser)
    • /relay               web reader + MCP servers, with private-network blocking
@@ -70,14 +70,14 @@ async function proxy(req, res, url) {
   const [, , pid, ...rest] = url.pathname.split('/');
   const a = authenticate(req);
   if (pid === 'config') {
-    if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your Nova server' : 'Invalid access token');
+    if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your AHB Broin server' : 'Invalid access token');
     return json(res, 200, { providers: configured, auth: !!APP_TOKEN, user: a.user ? { username: a.user.username, role: a.user.role } : null,
       features: { relay: RELAY, accounts: accountsEnabled(), sync: !!a.user, share: !!a.user, tasks: !!a.user, push: !!a.user } });
   }
   const up = UPSTREAMS[pid];
   if (!up) return fail(res, 404, `Unknown provider "${pid}"`);
   if (!up.key) return fail(res, 404, `No server key configured for ${pid}`);
-  if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your Nova server' : 'Invalid access token');
+  if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your AHB Broin server' : 'Invalid access token');
   if (rateLimited(a.user?.id || clientIP(req))) return fail(res, 429, 'Too many requests — slow down a little');
   if (overDailyLimit(a.user)) return fail(res, 429, 'Daily request limit reached for your account — ask the admin to raise it');
   if (+req.headers['content-length'] > MAX_BODY) return fail(res, 413, 'Request body too large');
@@ -133,11 +133,11 @@ const RELAY_RES = ['content-type', 'mcp-session-id', 'content-disposition', 'ret
 async function relay(req, res) {
   if (!RELAY) return fail(res, 404, 'Relay is disabled on this server');
   const a = authenticate(req);
-  if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your Nova server' : 'Invalid access token');
+  if (!canProxy(a)) return fail(res, 401, accountsEnabled() ? 'Sign in to your AHB Broin server' : 'Invalid access token');
   if (rateLimited(a.user?.id || clientIP(req))) return fail(res, 429, 'Too many requests');
   if (!['GET', 'POST', 'DELETE'].includes(req.method)) return fail(res, 405, 'Method not allowed');
   let target = String(req.headers['x-relay-url'] || '');
-  const headers = { 'user-agent': 'Mozilla/5.0 (compatible; NovaStudio/2; +https://github.com)' };
+  const headers = { 'user-agent': 'Mozilla/5.0 (compatible; AHBBroin/2; +https://github.com)' };
   for (const h of RELAY_REQ) if (req.headers[h]) headers[h] = req.headers[h];
   if (req.headers['x-relay-authorization']) headers.authorization = req.headers['x-relay-authorization'];
   let body;
@@ -228,7 +228,7 @@ await initAuth();
 await initPush();
 await initTasks();
 server.listen(PORT, HOST, () => {
-  console.log(`⚡ Nova Studio on http://localhost:${PORT}`);
+  console.log(`⚡ AHB Broin on http://localhost:${PORT}`);
   console.log(`   Data folder: ${DATA_DIR}`);
   console.log(`   Server keys: ${configured.join(', ') || 'none (users can still enter keys in the browser)'}`);
   console.log(`   Accounts: ${accountsEnabled() ? 'on' : 'off — open the app → Settings → Account to create the admin'}`);

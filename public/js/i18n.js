@@ -30,9 +30,9 @@ const MS = {
   'Auto-read replies aloud': 'Baca balasan secara automatik', 'Test voice': 'Uji suara', 'Theme': 'Tema', 'System': 'Sistem', 'Dark': 'Gelap', 'Light': 'Cerah', 'Enter key': 'Kekunci Enter',
   'Sends (desktop)': 'Menghantar (desktop)', 'New line': 'Baris baharu', 'Notify me when a video finishes': 'Beritahu saya apabila video siap', 'Install as an app': 'Pasang sebagai aplikasi',
   'Interface language': 'Bahasa antara muka', 'Export backup': 'Eksport sandaran', 'Import backup': 'Import sandaran', 'Delete all chats': 'Padam semua sembang', 'Include API keys in export': 'Sertakan kunci API dalam eksport',
-  'Use my Nova server (keys stay on the server)': 'Guna pelayan Nova saya (kunci kekal di pelayan)', 'Server URL': 'URL pelayan', 'Access token': 'Token akses', 'Test connection': 'Uji sambungan',
+  'Use my AHB Broin server (keys stay on the server)': 'Guna pelayan AHB Broin saya (kunci kekal di pelayan)', 'Server URL': 'URL pelayan', 'Access token': 'Token akses', 'Test connection': 'Uji sambungan',
   'Paste API key': 'Tampal kunci API', 'get key ↗': 'dapatkan kunci ↗', 'Settings saved': 'Tetapan disimpan', 'Use this model': 'Guna model ini', 'Load all': 'Muat semua', 'Model ID': 'ID model', 'Size': 'Saiz', 'Seconds': 'Saat',
-  'Lock now': 'Kunci sekarang', 'Change PIN': 'Tukar PIN', 'Turn off': 'Matikan', 'Turn on': 'Hidupkan', 'Turn on vault': 'Hidupkan peti kunci', 'Unlock': 'Buka kunci', 'Nova Studio is locked': 'Nova Studio dikunci',
+  'Lock now': 'Kunci sekarang', 'Change PIN': 'Tukar PIN', 'Turn off': 'Matikan', 'Turn on': 'Hidupkan', 'Turn on vault': 'Hidupkan peti kunci', 'Unlock': 'Buka kunci', 'AHB Broin is locked': 'AHB Broin dikunci',
   'Enter your PIN or passphrase to unlock your API keys.': 'Masukkan PIN atau frasa laluan untuk membuka kunci API anda.', 'PIN or passphrase': 'PIN atau frasa laluan', 'Forgot PIN? Reset saved keys': 'Lupa PIN? Set semula kunci tersimpan',
   'Auto-lock after inactivity': 'Kunci automatik selepas tidak aktif', 'Never': 'Tidak pernah',
   // Usage

@@ -70,6 +70,6 @@ export async function pushRoutes(req, res, url) {
     await writeJSONFile(subsFile(user.id), (await readJSONFile(subsFile(user.id), [])).filter(s => s.endpoint !== endpoint));
     return json(res, 200, { ok: true });
   }
-  if (url.pathname === '/api/push/test' && req.method === 'POST') return json(res, 200, { sent: await notifyUser(user.id, { title: '🔔 Nova Studio', body: 'Notifications are working.', url: './' }) });
+  if (url.pathname === '/api/push/test' && req.method === 'POST') return json(res, 200, { sent: await notifyUser(user.id, { title: '🔔 AHB Broin', body: 'Notifications are working.', url: './' }) });
   return fail(res, 404, 'Not found');
 }

@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Nova Studio",
-  "short_name": "Nova",
+  "name": "AHB Broin",
+  "short_name": "AHB Broin",
   "description": "Your own multi-provider AI studio: chat, images, video, voice, skills and usage tracking.",
   "start_url": "./",
   "scope": "./",

@@ -1,4 +1,4 @@
-# ⚡ Nova Studio
+# ⚡ AHB Broin
 
 Your own **bring-your-own-key AI studio**, installable on phone and desktop (PWA):
 
@@ -8,7 +8,7 @@ Your own **bring-your-own-key AI studio**, installable on phone and desktop (PWA
 - **Organise and compare.** Projects, skills, side-by-side model comparison, and scheduled tasks.
 - **Keep it in sync and under control.** Sync across devices, share links, and a token and cost monitor with budgets.
 
-It works as a **static site** (keys stay encrypted in your browser) or with the optional **Nova server**. The server is a zero-dependency Node.js app that holds your keys and adds accounts, sync, share links, scheduled tasks and push notifications.
+It works as a **static site** (keys stay encrypted in your browser) or with the optional **AHB Broin server**. The server is a zero-dependency Node.js app that holds your keys and adds accounts, sync, share links, scheduled tasks and push notifications.
 
 ---
 
@@ -16,7 +16,7 @@ It works as a **static site** (keys stay encrypted in your browser) or with the 
 
 1. [Features](#features)
 2. [Quick start](#quick-start)
-3. [Nova server: accounts, sync, sharing, tasks](#nova-server)
+3. [AHB Broin server: accounts, sync, sharing, tasks](#nova-server)
 4. [Feature guides](#feature-guides)
 5. [Privacy & security](#privacy--security)
 6. [Project structure & development](#project-structure)
@@ -63,7 +63,7 @@ Upload the **`public/`** folder to any HTTPS host. For example, drag it onto <ht
 
 Static hosting gives you everything except accounts, sync, share links, server tasks and push notifications. Some providers block browser requests (CORS); use the server for those.
 
-### Option B: Nova server (recommended)
+### Option B: AHB Broin server (recommended)
 
 Node.js 18.17 or newer. **No `npm install` needed.**
 
@@ -85,7 +85,7 @@ docker run -d -p 8787:8787 --env-file .env -v nova-data:/app/data --name nova no
 
 ---
 
-## Nova server
+## AHB Broin server
 
 | Feature | How it works |
 |---|---|
@@ -118,7 +118,7 @@ Documents are indexed **on your device**. Only the few excerpts relevant to each
 
 <details><summary><b>🎧 Live voice</b></summary>
 
-Tap 🎧 next to the mic. Speak naturally; Nova detects when you stop, answers using your current model, skills, connectors and knowledge, then speaks the reply and listens again. Tap the big button to interrupt or skip ahead. Choose voices under Settings → 🔊 Voice. Use a headset to avoid echo.
+Tap 🎧 next to the mic. Speak naturally; Broin detects when you stop, answers using your current model, skills, connectors and knowledge, then speaks the reply and listens again. Tap the big button to interrupt or skip ahead. Choose voices under Settings → 🔊 Voice. Use a headset to avoid echo.
 </details>
 
 <details><summary><b>⏰ Scheduled tasks</b></summary>
@@ -126,7 +126,7 @@ Tap 🎧 next to the mic. Speak naturally; Nova detects when you stop, answers u
 Open **⏰ Tasks**, then **＋ New task**. Pick when it runs (every day, weekdays, weekly, hourly or once), the time zone and the model.
 
 - **On the server:** tasks run even when every device is off. Turn on **🔔 notifications** under Settings → Account.
-- **On this device:** tasks run while Nova is open, and missed runs happen when you open it.
+- **On this device:** tasks run while Broin is open, and missed runs happen when you open it.
 </details>
 
 <details><summary><b>🛠 Image tools</b></summary>
@@ -147,7 +147,7 @@ HTML, SVG, JavaScript and Mermaid code blocks get a **▶ Run** button. The prev
 
 <details><summary><b>🔌 Connectors & MCP</b></summary>
 
-See **🔌 Connectors** in the app. Each enabled connector adds tool descriptions (tokens) to every message, so enable only what you need. For MCP servers, use **Route through my Nova server** to avoid CORS problems, and keep **Ask before running** on for servers you don't fully trust.
+See **🔌 Connectors** in the app. Each enabled connector adds tool descriptions (tokens) to every message, so enable only what you need. For MCP servers, use **Route through my AHB Broin server** to avoid CORS problems, and keep **Ask before running** on for servers you don't fully trust.
 </details>
 
 <details><summary><b>📁 My Files on each device</b></summary>

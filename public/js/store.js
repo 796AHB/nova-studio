@@ -14,7 +14,7 @@ export const DEFAULTS = {
   video: { provider: 'openai', model: 'sora-2', seconds: '8', size: '1280x720' },
   tts: { provider: 'browser', model: '', voice: '', auto: false },
   stt: { provider: 'browser', model: '', lang: '' },
-  system: 'You are Nova, a brilliant, friendly and helpful AI assistant. Use Markdown formatting when useful.',
+  system: 'You are Broin, a brilliant, friendly and helpful AI assistant. Use Markdown formatting when useful.',
   temperature: '', maxTokens: 8192, reasoning: '', historyLimit: 0,
   theme: 'system', sendOnEnter: true, notify: true,
   proxy: { enabled: false, url: '', token: '' },
@@ -81,7 +81,7 @@ function open() {
     };
     r.onsuccess = () => res(r.result);
     r.onerror = () => { dbp = null; rej(r.error); };
-    r.onblocked = () => toast('Close other Nova Studio tabs to finish the upgrade');
+    r.onblocked = () => toast('Close other AHB Broin tabs to finish the upgrade');
   });
   return dbp;
 }

@@ -164,7 +164,7 @@ export async function authRoutes(req, res, url) {
 export function requireUser(req, res) {
   const a = authenticate(req);
   if (a.user) return a.user;
-  fail(res, 401, accountsEnabled() ? 'Sign in to your Nova server' : 'Set APP_TOKEN or create an account on the server to use this feature');
+  fail(res, 401, accountsEnabled() ? 'Sign in to your AHB Broin server' : 'Set APP_TOKEN or create an account on the server to use this feature');
   return null;
 }
 export const allUserIds = () => [...users.map(u => u.id), ...(accountsEnabled() ? [] : ['owner'])];

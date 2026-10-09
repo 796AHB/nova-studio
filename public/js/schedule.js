@@ -1,4 +1,4 @@
-/* Schedule maths shared by the app and the Nova server (no DOM, no dependencies).
+/* Schedule maths shared by the app and the AHB Broin server (no DOM, no dependencies).
    A schedule is { type: 'daily'|'weekly'|'hourly'|'once', time: 'HH:MM', days: [0-6] (0 = Sunday), minute, at: ISO }. */
 const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function partsIn(ts, tz) {

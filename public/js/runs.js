@@ -112,11 +112,11 @@ export const runForMsg = (convoId, msgId) => [...RUNS].reverse().find(r => r.con
 /* ---------- audit export ---------- */
 const PERM_TEXT = { auto: 'auto-approved (session trust)', once: 'approved once', always: 'allow always', declined: 'declined', trusted: 'already trusted' };
 export function auditJSON(run) {
-  return JSON.stringify({ app: 'Nova Studio', exported: new Date().toISOString(), goal: run.goal, status: run.status, plan: run.plan, steps: run.steps, artifacts: run.artifacts.map(a => ({ ...a, data: a.data ? `[${a.kind || 'file'} omitted]` : '' })), audit: run.audit }, null, 2);
+  return JSON.stringify({ app: 'AHB Broin', exported: new Date().toISOString(), goal: run.goal, status: run.status, plan: run.plan, steps: run.steps, artifacts: run.artifacts.map(a => ({ ...a, data: a.data ? `[${a.kind || 'file'} omitted]` : '' })), audit: run.audit }, null, 2);
 }
 export function auditText(run) {
   const L = [];
-  L.push(`Nova Studio run — ${run.status}`, `Goal: ${run.goal}`, `Started: ${new Date(run.ts).toLocaleString()}`, '');
+  L.push(`AHB Broin run — ${run.status}`, `Goal: ${run.goal}`, `Started: ${new Date(run.ts).toLocaleString()}`, '');
   if (run.plan?.length) { L.push('PLAN'); run.plan.forEach((p, i) => L.push(`  ${i + 1}. [${p.status}] ${p.text}`)); L.push(''); }
   if (run.steps?.length) { L.push('STEPS'); run.steps.forEach(s => L.push(`  ${s.icon} ${s.connector} · ${s.label} (${s.name}) — ${s.status}${s.ms != null ? ` in ${(s.ms / 1000).toFixed(1)}s` : ''}${s.decision ? ` · ${PERM_TEXT[s.decision] || s.decision}` : ''}`)); L.push(''); }
   if (run.artifacts?.length) { L.push('ARTIFACTS'); run.artifacts.forEach(a => L.push(`  ${a.kind || 'file'}: ${a.name}`)); L.push(''); }

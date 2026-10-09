@@ -1,6 +1,6 @@
-/* Nova Studio service worker — offline app shell + cached CDN libraries.
+/* AHB Broin service worker — offline app shell + cached CDN libraries.
    API calls (provider hosts and /proxy/*) are never cached. Bump VERSION on each release. */
-const VERSION = 'nova-v3.2.2';
+const VERSION = 'nova-v3.3.0';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/app.css',
   './js/app.js', './js/config.js', './js/store.js', './js/usage.js', './js/util.js', './js/files.js', './js/connectors.js',
@@ -35,7 +35,7 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
-  if (sameOrigin && (url.pathname.includes('/proxy/') || url.pathname.endsWith('/relay') || url.pathname.endsWith('/healthz') || url.pathname.includes('/api/') || url.pathname.includes('/s/'))) return; // Nova server APIs: network only
+  if (sameOrigin && (url.pathname.includes('/proxy/') || url.pathname.endsWith('/relay') || url.pathname.endsWith('/healthz') || url.pathname.includes('/api/') || url.pathname.includes('/s/'))) return; // AHB Broin server APIs: network only
   if (req.mode === 'navigate' && sameOrigin && req.destination !== 'iframe') {                          // pages: network first, offline fallback
     e.respondWith(fetch(req).then(res => {
       if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); }
@@ -50,7 +50,7 @@ self.addEventListener('fetch', e => {
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch { d = { body: e.data?.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'Nova Studio', { body: d.body || '', icon: './icons/icon-192.png', badge: './icons/icon-192.png', tag: d.tag, data: { url: d.url || './' } }));
+  e.waitUntil(self.registration.showNotification(d.title || 'AHB Broin', { body: d.body || '', icon: './icons/icon-192.png', badge: './icons/icon-192.png', tag: d.tag, data: { url: d.url || './' } }));
 });
 
 self.addEventListener('notificationclick', e => {

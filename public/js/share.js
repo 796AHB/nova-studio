@@ -8,7 +8,7 @@ async function main() {
     const r = await fetch('/api/share/' + encodeURIComponent(id));
     const j = await r.json();
     if (!r.ok) throw new Error(j.error?.message || 'Not found');
-    document.title = j.title + ' · Nova Studio';
+    document.title = j.title + ' · AHB Broin';
     document.getElementById('sh-title').textContent = j.title;
     document.getElementById('sh-sub').textContent = `Shared ${new Date(j.created).toLocaleString()} · ${j.messages.length} messages · read-only`;
     box.innerHTML = j.messages.map(m => m.role === 'user'
