@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nova preview sandbox</title>
+<title>AHB Broin preview sandbox</title>
 <style>html,body{margin:0;font:14px system-ui,sans-serif;color:#888;display:grid;place-items:center;height:100%}</style>
 </head>
 <body>
 <p>Loading preview…</p>
 <script>
-/* Runs AI-generated code in an isolated, sandboxed frame (opaque origin: no access to Nova's storage, keys or chats). */
+/* Runs AI-generated code in an isolated, sandboxed frame (opaque origin: no access to the app's storage, keys or chats). */
 addEventListener('message', function (e) {
   var d = e.data || {};
   if (d.type !== 'nova-render' || typeof d.html !== 'string') return;

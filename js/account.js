@@ -1,4 +1,4 @@
-/* Account on your Nova server: sign in / create admin / sign up, password change, admin user management,
+/* Account on your AHB Broin server: sign in / create admin / sign up, password change, admin user management,
    push notifications. Works together with sync.js. */
 import { S, saveSettings } from './store.js';
 import { $, $$, esc, toast, openModal, fmtNum, fmtBytes, fmtDate } from './util.js';
@@ -30,7 +30,7 @@ export function accountTabHTML() {
       <p class="hint">Get notified on this device when a scheduled task finishes — even when the app is closed.</p>
       <div class="inrow wrap"><button class="btn sm" id="ac-push">${pushState() === 'on' ? '✓ Notifications on' : '🔔 Enable on this device'}</button>${pushState() === 'on' ? '<button class="btn sm" id="ac-pushtest">Send test</button><button class="btn sm" id="ac-pushoff">Turn off</button>' : ''}</div>`;
   }
-  return `<p class="hint">Sign in to your <b>Nova server</b> to sync across devices, share chat links, run scheduled tasks and get notifications. Your server runs <code>server.js</code> from this project.</p>
+  return `<p class="hint">Sign in to your <b>AHB Broin server</b> to sync across devices, share chat links, run scheduled tasks and get notifications. Your server runs <code>server.js</code> from this project.</p>
     <label>Server URL<input id="ac-url" value="${esc(S.proxy.url)}" placeholder="${esc(new URL('.', location.href).href)} (this site)"></label>
     <div id="ac-status" class="hint">Checking server…</div>
     <div id="ac-form"></div>`;
@@ -43,9 +43,9 @@ export async function bindAccountTab(rerender) {
       S.proxy.url = urlEl.value.trim(); saveSettings();
       let st;
       try { st = await api('/api/auth/status'); }
-      catch (e) { statusEl.textContent = `⚠️ Can't reach a Nova server here (${e.message}). Static hosting can't do accounts — deploy server.js (see README).`; form.innerHTML = ''; return; }
+      catch (e) { statusEl.textContent = `⚠️ Can't reach an AHB Broin server here (${e.message}). Static hosting can't do accounts — deploy server.js (see README).`; form.innerHTML = ''; return; }
       const mode = st.setup ? 'setup' : 'login';
-      statusEl.innerHTML = st.setup ? '✨ New server — create the admin account.' : `✓ Nova server found${st.signup ? ' · sign-up is open' : ''}.`;
+      statusEl.innerHTML = st.setup ? '✨ New server — create the admin account.' : `✓ AHB Broin server found${st.signup ? ' · sign-up is open' : ''}.`;
       form.innerHTML = `<div class="grid2"><label>Username<input id="ac-u" autocomplete="username" autocapitalize="off"></label><label>Password<input id="ac-p" type="password" autocomplete="${mode === 'setup' ? 'new-password' : 'current-password'}"></label></div>
         ${st.setup ? `<label>Server access token (APP_TOKEN, if set)<input id="ac-t" type="password" value="${esc(S.proxy.token)}"></label>` : ''}
         <div class="inrow wrap" style="margin-top:10px"><button class="btn primary" id="ac-go">${st.setup ? 'Create admin account' : 'Sign in'}</button>${st.signup ? '<button class="btn" id="ac-signup">Create account</button>' : ''}</div><p class="lk-err" id="ac-err"></p>`;
@@ -144,6 +144,6 @@ export async function openShares(justCreated) {
     <div class="kb-docs" style="max-height:none">${list.map(s => `<div class="kb-doc"><span>🔗</span><div><b>${esc(s.title)}</b><small>${fmtDate(s.created)} · ${s.count} messages</small></div><a class="btn sm" href="${esc(link(s.id))}" target="_blank" rel="noopener">Open</a><button class="btn sm danger" data-revoke="${s.id}">Revoke</button></div>`).join('') || '<p class="hint">No shared links yet.</p>'}</div>
     <div class="dlg-actions"><button class="btn primary" data-close>Done</button></div>`);
   const c = $('#sh-copy'); if (c) c.onclick = () => { navigator.clipboard?.writeText($('#sh-link').value).then(() => toast('Link copied')); };
-  const n = $('#sh-native'); if (n) n.onclick = () => navigator.share({ title: 'Nova Studio chat', url: $('#sh-link').value }).catch(() => {});
+  const n = $('#sh-native'); if (n) n.onclick = () => navigator.share({ title: 'AHB Broin chat', url: $('#sh-link').value }).catch(() => {});
   $$('[data-revoke]').forEach(b => b.onclick = async () => { if (!confirm('Revoke this link? It will stop working for everyone.')) return; try { await api('/api/share/' + b.dataset.revoke, { method: 'DELETE' }); toast('Link revoked'); openShares(); } catch (e) { toast(e.message); } });
 }

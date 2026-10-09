@@ -469,7 +469,7 @@ async function onClick(ev) {
     case 'add-files': { const r = await addPickedFiles(); if (r) { st.cwd = r.name; st.view = 'browse'; } return render(); }
     case 'reconnect': await reconnect(root); return render();
     case 'rescan': await scanRoot(root); return render();
-    case 'remove': if (confirm(`Remove “${root.name}” from Nova? (Your files are not deleted.)`)) { await removeRoot(root); if (st.cwd.startsWith(root.name)) st.cwd = ''; st.sel.clear(); st.report = null; render(); } return;
+    case 'remove': if (confirm(`Remove “${root.name}” from Broin? (Your files are not deleted.)`)) { await removeRoot(root); if (st.cwd.startsWith(root.name)) st.cwd = ''; st.sel.clear(); st.report = null; render(); } return;
     case 'cd': st.cwd = b.dataset.p; st.shown = 200; st.grep = null; render(); $('#fx-list', dlg)?.scrollTo(0, 0); return;
     case 'kind': st.kind = b.dataset.k; st.shown = 200; st.grep = null; return render();
     case 'clear': Object.assign(st, { q: '', kind: 'all', size: 0, days: 0, grep: null, shown: 200 }); return render();

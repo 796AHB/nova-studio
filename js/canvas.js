@@ -1,5 +1,5 @@
 /* Code canvas: run HTML / SVG / JavaScript / Mermaid from AI answers in a sandboxed frame.
-   The frame has an opaque origin, so previewed code can't read Nova's keys, chats or storage. */
+   The frame has an opaque origin, so previewed code can't read the app's keys, chats or storage. */
 import { $, esc, download, copy } from './util.js';
 
 export const RUNNABLE = /^(html|htm|svg|xml|javascript|js|mermaid)$/i;

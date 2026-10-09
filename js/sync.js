@@ -1,4 +1,4 @@
-/* Sync across devices through your Nova server.
+/* Sync across devices through your AHB Broin server.
    Local changes are queued ("dirty") and pushed; remote changes are pulled with a cursor.
    Conflicts: last write wins per record. API keys are never synced. */
 import { S, LS, DB, saveSettings, loadSkills, saveSkillsLS } from './store.js';

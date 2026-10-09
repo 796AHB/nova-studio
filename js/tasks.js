@@ -1,5 +1,5 @@
 /* Scheduled tasks.
-   • On your Nova server: run on time even when your devices are off; results sync to all devices + push notification.
+   • On your AHB Broin server: run on time even when your devices are off; results sync to all devices + push notification.
    • On this device: run while the app is open (missed runs catch up when you open it). */
 import { PROVIDERS } from './config.js';
 import { S, LS } from './store.js';
@@ -46,12 +46,12 @@ export async function openTasks() {
       <small>${t.nextRun && t.enabled ? `Next: ${new Date(t.nextRun).toLocaleString()}` : t.enabled ? 'Not scheduled' : 'Paused'}${t.lastRun ? ` · Last: ${fmtDate(t.lastRun)} ${new Date(t.lastRun).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${t.lastStatus === 'error' ? '⚠️' : '✓'}` : ''}</small></div>
       <div class="task-act">${t.lastConvo ? `<button class="btn sm" data-open="${esc(t.lastConvo)}" data-w="${where}">Result</button>` : ''}<button class="btn sm" data-run="${t.id}" data-w="${where}">▶ Run now</button><button class="btn sm" data-edit="${t.id}" data-w="${where}">Edit</button></div></div>`;
   openModal(`<div class="dlg-title"><h2>⏰ Scheduled tasks</h2><button class="icon sm" data-close aria-label="Close">✕</button></div>
-    <p class="hint">Let Nova do things on a schedule: a morning news brief, a weekly report, a daily quote in Malay…</p>
-    <h3>💻 On your Nova server <small class="hint">— runs even when your phone is off</small></h3>
-    ${!app.serverTasks() ? '<p class="hint">Sign in to your Nova server (Settings → Account) to run tasks on the server and get push notifications.</p>'
+    <p class="hint">Let Broin do things on a schedule: a morning news brief, a weekly report, a daily quote in Malay…</p>
+    <h3>💻 On your AHB Broin server <small class="hint">— runs even when your phone is off</small></h3>
+    ${!app.serverTasks() ? '<p class="hint">Sign in to your AHB Broin server (Settings → Account) to run tasks on the server and get push notifications.</p>'
       : server?.error ? `<p class="hint">⚠️ ${esc(server.error)}</p>`
       : `${server.tasks.map(t => row(t, 'server')).join('') || '<p class="hint">No server tasks yet.</p>'}<p class="hint">Models available on the server: ${esc((server.providers || []).join(', ') || 'none — add provider keys to the server .env')}</p>`}
-    <h3>📱 On this device <small class="hint">— runs while Nova is open</small></h3>
+    <h3>📱 On this device <small class="hint">— runs while Broin is open</small></h3>
     ${local().map(t => row(t, 'device')).join('') || '<p class="hint">No device tasks yet.</p>'}
     <div class="dlg-actions"><button class="btn" data-close>Close</button><button class="btn primary" id="tk-new">＋ New task</button></div>`, 'wide');
   const body = $('#modalBody');
@@ -84,7 +84,7 @@ function editTask(t, where, server) {
   openModal(`<div class="dlg-title"><h2>${isNew ? 'New task' : 'Edit task'} <small class="hint">${where === 'server' ? '· on server' : '· on this device'}</small></h2></div>
     ${isNew && app.serverTasks() && server?.providers?.length ? `<div class="seg sm" id="tk-where"><button data-w="server" class="${where === 'server' ? 'active' : ''}">💻 Server</button><button data-w="device" class="${where === 'device' ? 'active' : ''}">📱 This device</button></div>` : ''}
     <label>Name<input id="tk-name" value="${esc(t.name)}" placeholder="e.g. Morning brief"></label>
-    <label>What should Nova do?<textarea id="tk-prompt" rows="5" placeholder="e.g. Summarise today's top 5 tech news stories in Bahasa Melayu with links.">${esc(t.prompt)}</textarea></label>
+    <label>What should Broin do?<textarea id="tk-prompt" rows="5" placeholder="e.g. Summarise today's top 5 tech news stories in Bahasa Melayu with links.">${esc(t.prompt)}</textarea></label>
     <div class="grid2"><label>Repeat<select id="tk-type">${TYPES.map(([v, l]) => `<option value="${v}" ${v === typeVal ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     <label id="tk-timel">Time<input id="tk-time" type="time" value="${esc(t.schedule.time || '08:00')}"></label></div>
     <div id="tk-days" class="inrow wrap">${DAYS.map((d, i) => `<label class="check"><input type="checkbox" value="${i}" ${(t.schedule.days || []).includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div>
@@ -121,7 +121,7 @@ function editTask(t, where, server) {
   $('#tk-back').onclick = openTasks;
   $('#tk-save').onclick = async () => {
     const data = { name: $('#tk-name').value.trim() || 'Task', prompt: $('#tk-prompt').value.trim(), schedule: sched(), tz: $('#tk-tz').value.trim() || 'UTC', provider: $('#tk-prov').value, model: $('#tk-model').value.trim(), webSearch: $('#tk-web').checked, notify: $('#tk-notify').checked, enabled: $('#tk-on').checked, projectId: $('#tk-proj')?.value || '' };
-    if (!data.prompt) return toast('Tell Nova what to do');
+    if (!data.prompt) return toast('Tell Broin what to do');
     if (!data.provider || !data.model) return toast('Choose a provider and model');
     if (data.notify && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission().catch(() => {});
     try {

@@ -85,7 +85,7 @@ export function unlockScreen() {
   return new Promise(resolve => {
     const el = document.createElement('div');
     el.id = 'lockscreen';
-    el.innerHTML = `<form class="lockbox" autocomplete="off"><div class="logo">🔒</div><h1>Nova Studio is locked</h1><p class="hint">Enter your PIN or passphrase to unlock your API keys.</p>
+    el.innerHTML = `<form class="lockbox" autocomplete="off"><div class="logo">🔒</div><h1>AHB Broin is locked</h1><p class="hint">Enter your PIN or passphrase to unlock your API keys.</p>
       <input id="lk-pin" type="password" inputmode="text" placeholder="PIN or passphrase" aria-label="PIN or passphrase" autofocus>
       <button class="btn primary" id="lk-go">Unlock</button><p class="lk-err" id="lk-err"></p>
       <button type="button" class="btn ghost sm" id="lk-reset">Forgot PIN? Reset saved keys</button></form>`;

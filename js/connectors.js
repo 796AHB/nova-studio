@@ -1,5 +1,5 @@
 /* Connectors: tools the AI can call during a chat.
-   Built-in connectors run in the browser; remote MCP servers are reached directly or through the Nova server relay. */
+   Built-in connectors run in the browser; remote MCP servers are reached directly or through the AHB Broin server relay. */
 import { S, saveSettings, LS } from './store.js';
 import { APP_VERSION } from './config.js';
 import { $, $$, esc, uid, toast, openModal, closeModal, fmtNum, fmtBytes, fmtDate } from './util.js';
@@ -77,14 +77,14 @@ export const BUILTIN = [
   },
   {
     id: 'web', icon: '🌐', name: 'Web reader', desc: 'Read any web page the AI or you point to and turn it into clean text.',
-    status: () => net.relay() ? 'Using your Nova server' : cfg('web').jina ? 'Using Jina Reader (r.jina.ai)' : 'Needs the Nova server or Jina Reader (most sites block direct browser reads)',
+    status: () => net.relay() ? 'Using your AHB Broin server' : cfg('web').jina ? 'Using Jina Reader (r.jina.ai)' : 'Needs the AHB Broin server or Jina Reader (most sites block direct browser reads)',
     settings: [{ key: 'jina', type: 'check', label: 'Fallback: use Jina Reader (r.jina.ai) — the URL is sent to that service' }],
     tools: [{ name: 'web_read', description: 'Fetch a web page and return its readable text content.', parameters: obj({ url: str('Full http(s) URL') }, ['url']),
       label: a => a.url, run: async a => readWeb(a.url) }],
   },
   {
     id: 'search', icon: '🔎', name: 'Web search', desc: 'Search the live web with Tavily (free tier available).',
-    status: () => net.serverHas('tavily') ? 'Using server key 🔒' : cfg('search').key ? 'API key set' : 'Add a Tavily API key (tavily.com) or set TAVILY_API_KEY on your Nova server',
+    status: () => net.serverHas('tavily') ? 'Using server key 🔒' : cfg('search').key ? 'API key set' : 'Add a Tavily API key (tavily.com) or set TAVILY_API_KEY on your AHB Broin server',
     settings: [{ key: 'key', type: 'password', label: 'Tavily API key', placeholder: 'tvly-…' }],
     tools: [{ name: 'web_search', description: 'Search the web for current information. Returns an answer summary and top results with URLs.',
       parameters: obj({ query: str('Search query'), max_results: int('1-10, default 5'), topic: enm(['general', 'news'], 'Use news for recent events') }, ['query']),
@@ -207,7 +207,7 @@ export async function readWeb(url) {
     return clip(await r.text());
   } else {
     try { const r = await fetch(url); ct = r.headers.get('content-type') || ''; html = await r.text(); }
-    catch { throw new Error('This site blocks direct browser reads. Turn on the Nova server, or enable Jina Reader in Connectors → Web reader.'); }
+    catch { throw new Error('This site blocks direct browser reads. Turn on the AHB Broin server, or enable Jina Reader in Connectors → Web reader.'); }
   }
   if (!/html|xml/.test(ct) && !/^\s*</.test(html)) return clip(`${url}\n\n${html}`);
   const doc = new DOMParser().parseFromString(html.replace(/<\/(p|div|h[1-6]|li|tr|section|article|blockquote|pre)>|<br\s*\/?>/gi, '$&\n'), 'text/html');
@@ -256,11 +256,11 @@ async function mcpFetch(srv, init) {
   const headers = { ...init.headers };
   if (srv.auth) headers.authorization = /^(bearer|basic|token) /i.test(srv.auth) ? srv.auth : 'Bearer ' + srv.auth;
   if (srv.relay) {
-    if (!net.relay()) throw new Error('“Route through Nova server” is on, but the Nova server is not connected (Settings → Keys).');
+    if (!net.relay()) throw new Error('“Route through AHB Broin server” is on, but the AHB Broin server is not connected (Settings → Keys).');
     return net.relayFetch(srv.url, { ...init, headers });
   }
   try { return await fetch(srv.url, { ...init, headers }); }
-  catch (e) { throw new Error(`Can't reach ${srv.url} (${e.message}). If it blocks browser requests (CORS), turn on “Route through Nova server”.`); }
+  catch (e) { throw new Error(`Can't reach ${srv.url} (${e.message}). If it blocks browser requests (CORS), turn on “Route through AHB Broin server”.`); }
 }
 async function mcpRpc(srv, method, params, notify = false) {
   const s = sessions.get(srv.id) || {};
@@ -296,7 +296,7 @@ async function mcpRpc(srv, method, params, notify = false) {
   return msg.result;
 }
 async function mcpInit(srv) {
-  const r = await mcpRpc(srv, 'initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'Nova Studio', version: APP_VERSION } });
+  const r = await mcpRpc(srv, 'initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'AHB Broin', version: APP_VERSION } });
   sessions.set(srv.id, { ...(sessions.get(srv.id) || {}), proto: r.protocolVersion || '2025-06-18' });
   await mcpRpc(srv, 'notifications/initialized', null, true).catch(() => {});
   return r;
@@ -369,7 +369,7 @@ export function openConnectors() {
     </div>`;
   };
   const mcpCard = m => `<div class="conn ${m.enabled ? 'on' : ''}">
-    <div class="conn-h"><span class="conn-ico">🔌</span><div class="conn-t"><b>${esc(m.name)}</b><small>${esc(m.url)}${m.relay ? ' · via Nova server' : ''}</small></div>
+    <div class="conn-h"><span class="conn-ico">🔌</span><div class="conn-t"><b>${esc(m.name)}</b><small>${esc(m.url)}${m.relay ? ' · via AHB Broin server' : ''}</small></div>
     <label class="switch"><input type="checkbox" data-mcp-on="${m.id}" ${m.enabled ? 'checked' : ''} aria-label="Enable ${esc(m.name)}"><span></span></label></div>
     <div class="conn-st">${m.error ? '⚠️ ' + esc(m.error) : m.tools ? `✓ ${m.tools.length} tools${m.serverName ? ' · ' + esc(m.serverName) : ''}${m.confirm !== false ? ' · asks before running' : ''}` : 'Not connected yet'}</div>
     ${m.tools?.length ? `<details class="conn-tools"><summary>Tools</summary>${m.tools.map(t => `<label class="check"><input type="checkbox" data-mcp-tool="${m.id}" value="${esc(t.name)}" ${m.disabledTools?.includes(t.name) ? '' : 'checked'}> <code>${esc(t.name)}</code> <small class="hint">${esc(t.description.slice(0, 120))}</small></label>`).join('')}</details>` : ''}
@@ -415,7 +415,7 @@ function editMcp(m) {
     <label>Name<input id="mc-name" value="${esc(m.name)}" placeholder="e.g. Company CRM"></label>
     <label>Server URL (Streamable HTTP endpoint)<input id="mc-url" value="${esc(m.url)}" placeholder="https://example.com/mcp" spellcheck="false"></label>
     <label>Authorization (optional)<input id="mc-auth" type="password" value="${esc(m.auth || '')}" placeholder="Bearer token or API key" autocomplete="off"></label>
-    <label class="check" style="margin-top:12px"><input type="checkbox" id="mc-relay" ${m.relay ? 'checked' : ''}> Route through my Nova server (fixes CORS; recommended)</label>
+    <label class="check" style="margin-top:12px"><input type="checkbox" id="mc-relay" ${m.relay ? 'checked' : ''}> Route through my AHB Broin server (fixes CORS; recommended)</label>
     <label class="check" style="margin-top:8px"><input type="checkbox" id="mc-confirm" ${m.confirm !== false ? 'checked' : ''}> Ask me before each tool runs</label>
     <p class="hint">Only connect servers you trust — their tools can read or change data in the services they connect to.</p>
     <div class="dlg-actions"><button class="btn" id="mc-back">Back</button><button class="btn primary" id="mc-save">${isNew ? 'Add & connect' : 'Save & reconnect'}</button></div>`);

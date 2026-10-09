@@ -1,5 +1,5 @@
 /* ============================================================
-   Nova Studio — bring-your-own-key AI studio
+   AHB Broin — bring-your-own-key AI studio
    Chat · Image · Video · Voice · Skills · Usage monitor · PWA
    ============================================================ */
 import { PROVIDERS, VOICES, MODE_LABEL, APP_VERSION, contextFor } from './config.js';
@@ -36,7 +36,7 @@ let serverKeys = new Set(), serverStatus = '', serverFeatures = {};
 const saveSkills = () => saveSkillsLS(skills);
 const messagesEl = $('#messages'), input = $('#input'), sendBtn = $('#sendBtn'), micBtn = $('#micBtn'), modal = $('#modal');
 
-/* ---------- Connection: direct keys or Nova proxy server ---------- */
+/* ---------- Connection: direct keys or the AHB Broin proxy server ---------- */
 const proxyRoot = () => (S.proxy.url || new URL('.', location.href).href).replace(/\/+$/, '');
 const viaProxy = pid => S.proxy.enabled && serverKeys.has(pid);
 const proxyHeaders = () => ({ ...(S.proxy.token ? { 'x-nova-token': S.proxy.token } : {}), ...(S.account?.token ? { 'x-nova-session': S.account.token } : {}) });
@@ -54,14 +54,14 @@ function base(pid) {
 function key(pid) {
   if (viaProxy(pid)) return '';
   const k = S.keys[pid];
-  if (!k && !PROVIDERS[pid].keyless) throw new Error(`Add your ${PROVIDERS[pid].name} API key in Settings ⚙️${S.proxy.enabled ? ' (or on your Nova server)' : ''}`);
+  if (!k && !PROVIDERS[pid].keyless) throw new Error(`Add your ${PROVIDERS[pid].name} API key in Settings ⚙️${S.proxy.enabled ? ' (or on your AHB Broin server)' : ''}`);
   return k || '';
 }
 function authHeaders(pid, json = true) {
   const h = viaProxy(pid) ? proxyHeaders() : {};
   if (json) h['Content-Type'] = 'application/json';
   const k = key(pid); if (k) h.Authorization = 'Bearer ' + k;
-  if (pid === 'openrouter') { h['X-Title'] = 'Nova Studio'; h['HTTP-Referer'] = location.origin.startsWith('http') ? location.origin : 'https://nova.studio'; }
+  if (pid === 'openrouter') { h['X-Title'] = 'AHB Broin'; h['HTTP-Referer'] = location.origin.startsWith('http') ? location.origin : 'https://nova.studio'; }
   return h;
 }
 function gHeaders(pid, json = true) { const h = viaProxy(pid) ? proxyHeaders() : { 'x-goog-api-key': key(pid) }; if (json) h['Content-Type'] = 'application/json'; return h; }
@@ -83,13 +83,13 @@ async function loadServerConfig(quiet = true) {
     if (j.user && S.account?.token) { S.account.role = j.user.role; }
     serverStatus = `✓ Connected · server keys for: ${[...serverKeys].map(p => PROVIDERS[p]?.name || p).join(', ') || 'none'}`;
   } catch (e) {
-    serverStatus = `⚠️ Can't reach Nova server: ${e.message}`;
+    serverStatus = `⚠️ Can't reach AHB Broin server: ${e.message}`;
     if (!quiet) toast(serverStatus, 5000);
   }
 }
 
 const relayOn = () => S.proxy.enabled && !!serverFeatures.relay;
-/** Fetch any URL through the Nova server relay (web reader, MCP servers). */
+/** Fetch any URL through the AHB Broin server relay (web reader, MCP servers). */
 function relayFetch(url, init = {}) {
   const h = { ...proxyHeaders(), 'x-relay-url': url };
   for (const [k, v] of Object.entries(init.headers || {})) h[k.toLowerCase() === 'authorization' ? 'x-relay-authorization' : k] = v;
@@ -755,7 +755,7 @@ async function runTurn(convo, user, runMode) {
     console.error(e);
     if (e.name === 'AbortError') asst.text += (asst.text ? '\n\n' : '') + '_⏹ Stopped_';
     else asst.error = (e instanceof TypeError && /fetch|network|load/i.test(e.message))
-      ? `Network/CORS error: ${e.message}. Check the API key, base URL and your connection — or this provider may not allow direct browser requests (use the Nova server proxy).`
+      ? `Network/CORS error: ${e.message}. Check the API key, base URL and your connection — or this provider may not allow direct browser requests (use the AHB Broin server proxy).`
       : (e.message || String(e));
   }
   if (runMode === 'chat' && (asst._u || asst.text || asst.thinking || asst.tools?.length)) {
@@ -881,7 +881,7 @@ function welcomeHTML() {
   if (proj) return `<div class="welcome"><div class="logo">${esc(proj.icon || '📁')}</div><h1>${esc(proj.name)}</h1><p>${esc((proj.instructions || 'New chats here use this project\'s instructions' + (proj.model ? ' and model' : '') + '.').slice(0, 220))}</p>
     <div class="inrow wrap center"><button class="btn" data-act="projedit">⚙️ Project settings</button>${proj.kbIds?.length ? `<span class="chip sm on">📚 ${proj.kbIds.length} knowledge base${proj.kbIds.length > 1 ? 's' : ''}</span>` : ''}${proj.model ? `<span class="chip sm">🤖 ${esc(proj.model.model)}</span>` : ''}</div></div>`;
   const anyKey = Object.keys(PROVIDERS).some(id => S.keys[id]) || hasKey('custom') || serverKeys.size;
-  return `<div class="welcome"><div class="logo">⚡</div><h1>Nova Studio</h1><p>Your own AI studio — any provider, any model. Chat, images, video, voice, files, connectors & skills.</p>
+  return `<div class="welcome"><div class="logo">⚡</div><h1>AHB Broin</h1><p>Your own AI studio — any provider, any model. Chat, images, video, voice, files, connectors & skills.</p>
   ${anyKey ? '' : '<button class="btn primary" data-act="settings">🔑 Add your first API key</button>'}
   <div class="cards">
     <button class="card" data-act="try" data-mode="chat" data-p="Explain how black holes form, simply.">💬<b>Chat</b><span>Files, photos, PDFs, audio</span></button>
@@ -1101,14 +1101,14 @@ function openSettings(section) {
 
     <section data-sec="keys">
       <div class="card-box">
-        <label class="check"><input type="checkbox" id="st-proxy" ${S.proxy.enabled ? 'checked' : ''}> Use my Nova server (keys stay on the server)</label>
+        <label class="check"><input type="checkbox" id="st-proxy" ${S.proxy.enabled ? 'checked' : ''}> Use my AHB Broin server (keys stay on the server)</label>
         <div id="st-proxybox" ${S.proxy.enabled ? '' : 'hidden'}>
           <label>Server URL<input id="st-purl" value="${esc(S.proxy.url)}" placeholder="${esc(new URL('.', location.href).href)} (this site)"></label>
           <label>Access token<input id="st-ptoken" type="password" value="${esc(S.proxy.token)}" placeholder="APP_TOKEN from your server .env" autocomplete="off"></label>
           <div class="inrow"><button class="btn sm" id="st-ptest">Test connection</button><span class="hint" id="st-pstatus">${esc(serverStatus)}</span></div>
         </div>
       </div>
-      <p class="hint">🔒 Browser keys are saved only on this device and sent directly to each provider. With the Nova server, keys never reach the browser.</p>
+      <p class="hint">🔒 Browser keys are saved only on this device and sent directly to each provider. With the AHB Broin server, keys never reach the browser.</p>
       ${keyRows}
     </section>
 
@@ -1145,8 +1145,8 @@ function openSettings(section) {
       <label class="check"><input type="checkbox" id="st-upmodels" ${S.autoUpdate.models ? 'checked' : ''}> Refresh model lists weekly (from providers you have keys for)</label>
       <label class="check" style="margin-top:6px"><input type="checkbox" id="st-upprices" ${S.autoUpdate.prices ? 'checked' : ''}> Update prices weekly from OpenRouter's public catalogue</label>
       <h3>Install as an app</h3>
-      ${standalone ? '<p>✅ Running as an installed app.</p>' : isIOS ? '<p>On iPhone/iPad: tap <b>Share</b> → <b>Add to Home Screen</b>.</p>' : `<p class="hint">Install Nova Studio for a full-screen app with offline access.</p><button class="btn" id="st-install" ${deferredInstall ? '' : 'disabled'}>📲 Install app</button>${deferredInstall ? '' : '<p class="hint">If the button is disabled, use your browser menu → “Install app” / “Add to Home screen”. Installing needs HTTPS.</p>'}`}
-      <p class="hint">Nova Studio v${APP_VERSION} · ${navigator.serviceWorker?.controller ? 'offline-ready ✓' : 'offline cache not active yet'}</p>
+      ${standalone ? '<p>✅ Running as an installed app.</p>' : isIOS ? '<p>On iPhone/iPad: tap <b>Share</b> → <b>Add to Home Screen</b>.</p>' : `<p class="hint">Install AHB Broin for a full-screen app with offline access.</p><button class="btn" id="st-install" ${deferredInstall ? '' : 'disabled'}>📲 Install app</button>${deferredInstall ? '' : '<p class="hint">If the button is disabled, use your browser menu → “Install app” / “Add to Home screen”. Installing needs HTTPS.</p>'}`}
+      <p class="hint">AHB Broin v${APP_VERSION} · ${navigator.serviceWorker?.controller ? 'offline-ready ✓' : 'offline cache not active yet'}</p>
     </section>
 
     <section data-sec="account" hidden><div id="st-account">${accountTabHTML()}</div></section>
@@ -1195,7 +1195,7 @@ function openSettings(section) {
     S.theme = $('#st-theme').value; S.sendOnEnter = $('#st-enter').value === '1'; S.notify = $('#st-notify').checked; S.lang = $('#st-uilang').value; S.autoUpdate = { ...S.autoUpdate, models: $('#st-upmodels').checked, prices: $('#st-upprices').checked };
   };
   $('#st-ptest').onclick = async () => { collect(); $('#st-pstatus').textContent = 'Testing…'; await loadServerConfig(); $('#st-pstatus').textContent = serverStatus || 'Proxy is off'; };
-  $('#st-test').onclick = () => { collect(); speak('Hello! This is how I sound. Nova Studio is ready.', 'test'); };
+  $('#st-test').onclick = () => { collect(); speak('Hello! This is how I sound. AHB Broin is ready.', 'test'); };
   $('#st-install')?.addEventListener('click', installApp);
   $('#st-save').onclick = async () => {
     collect(); saveSettings(); applyTheme(); closeModal();
@@ -1219,7 +1219,7 @@ async function exportAll(includeKeys) {
 async function importAll(file) {
   try {
     const j = JSON.parse(await file.text());
-    if (j.app !== 'nova-studio' && !j.convos) throw new Error('not a Nova Studio backup');
+    if (j.app !== 'nova-studio' && !j.convos) throw new Error('not an AHB Broin backup');
     if (j.settings) replaceSettings(j.settings);
     if (Array.isArray(j.skills)) { skills = j.skills; saveSkills(); }
     if (j.convos?.length) await DB.putMany('convos', j.convos);
@@ -1314,7 +1314,7 @@ async function shareChat() {
   if (!cur?.messages.length) return toast('Nothing to share yet');
   if (!signedIn()) {
     openModal(`<div class="dlg-title"><h2>🔗 Share</h2><button class="icon sm" data-close aria-label="Close">✕</button></div>
-      <p>Share links are hosted on your <b>Nova server</b>. Sign in under Settings → 👤 Account to create links anyone can open.</p>
+      <p>Share links are hosted on your <b>AHB Broin server</b>. Sign in under Settings → 👤 Account to create links anyone can open.</p>
       <p class="hint">Without a server you can export the chat as a single web page file and send it.</p>
       <div class="dlg-actions"><button class="btn" id="sh-acc">Sign in</button><button class="btn primary" id="sh-html">🌐 Export as web page</button></div>`);
     $('#sh-acc').onclick = () => openSettings('account');
@@ -1337,14 +1337,14 @@ function exportChatHTML() {
 .u{display:flex;justify-content:flex-end;margin:16px 0}.u div{background:#e8e9fb;padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:85%}
 .a{margin:16px 0}.a img{max-width:100%;border-radius:12px;display:block;margin:8px 0}.a small{color:#636b7e}pre{background:#0d1117;color:#e6edf3;padding:12px;border-radius:10px;overflow:auto}code{font-family:ui-monospace,monospace}
 table{border-collapse:collapse}td,th{border:1px solid #dde1ea;padding:6px 10px}@media(prefers-color-scheme:dark){body{background:#0a0c11;color:#e9ebf1}.u div{background:#1e2330}td,th{border-color:#252a35}}</style></head>
-<body><main><h1>${esc(cur.title)}</h1><p><small>Exported from Nova Studio · ${new Date().toLocaleString()}</small></p>${body}</main></body></html>`;
+<body><main><h1>${esc(cur.title)}</h1><p><small>Exported from AHB Broin · ${new Date().toLocaleString()}</small></p>${body}</main></body></html>`;
   download(html, `${cur.title.replace(/[^\w\- ]+/g, '').trim().slice(0, 40) || 'chat'}.html`, 'text/html');
 }
 function exportChatMD() {
   if (!cur?.messages.length) return toast('Nothing to export yet');
-  let out = `# ${cur.title}\n\n_Exported from Nova Studio · ${new Date().toLocaleString()}_\n\n`;
+  let out = `# ${cur.title}\n\n_Exported from AHB Broin · ${new Date().toLocaleString()}_\n\n`;
   for (const m of cur.messages) {
-    out += `### ${m.role === 'user' ? '🧑 You' : '⚡ Nova' + (m.meta ? ` (${m.meta})` : '')}${m.ts ? ` · ${new Date(m.ts).toLocaleString()}` : ''}\n\n`;
+    out += `### ${m.role === 'user' ? '🧑 You' : '⚡ Broin' + (m.meta ? ` (${m.meta})` : '')}${m.ts ? ` · ${new Date(m.ts).toLocaleString()}` : ''}\n\n`;
     if (m.atts?.length) out += m.atts.map(a => `📎 ${a.name}`).join('  \n') + '\n\n';
     if (m.text) out += m.text + '\n\n';
     for (const x of m.media || []) out += `_[${x.kind}${x.prompt ? ': ' + x.prompt : ''}]_\n\n`;
@@ -1500,7 +1500,7 @@ async function enhance() {
 /* ---------- PWA: service worker, install, offline, notifications ---------- */
 let deferredInstall = null;
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; $('#installBtn').hidden = false; });
-addEventListener('appinstalled', () => { deferredInstall = null; $('#installBtn').hidden = true; toast('Nova Studio installed 🎉'); });
+addEventListener('appinstalled', () => { deferredInstall = null; $('#installBtn').hidden = true; toast('AHB Broin installed 🎉'); });
 async function installApp() {
   if (!deferredInstall) return openSettings('app');
   deferredInstall.prompt();
@@ -1511,7 +1511,7 @@ function registerSW() {
   if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
   navigator.serviceWorker.register('./sw.js').then(reg => {
     if (!reg) return;
-    const promptUpdate = () => toast('A new version of Nova Studio is ready', 0, { label: 'Update', fn: () => reg.waiting?.postMessage('skipWaiting') });
+    const promptUpdate = () => toast('A new version of AHB Broin is ready', 0, { label: 'Update', fn: () => reg.waiting?.postMessage('skipWaiting') });
     if (reg.waiting && navigator.serviceWorker.controller) promptUpdate();
     reg.addEventListener('updatefound', () => {
       const nw = reg.installing;
@@ -1623,7 +1623,7 @@ initTasks({
   syncNow: () => syncNow(),
   notify: (title, body, convoId) => notify(title, body, convoId),
   runLocal: async t => {
-    if (busy) throw new Error('Nova is busy — the task will run when the current reply finishes');
+    if (busy) throw new Error('Broin is busy — the task will run when the current reply finishes');
     const c = { id: uid(), title: `⏰ ${t.name} — ${new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}`, messages: [], updated: Date.now(), projectId: t.projectId || '', model: { provider: t.provider, model: t.model }, scheduled: t.id };
     convos.unshift(c);
     const user = { id: uid(), role: 'user', text: t.prompt + (t.webSearch ? '\n\n(Search the web first if a search tool is available.)' : ''), atts: [], mode: 'chat', ts: Date.now() };
