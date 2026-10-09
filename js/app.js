@@ -105,8 +105,13 @@ async function ok(res) {
     catch { msg = t; }
   } catch {}
   const hint = res.status === 401 ? ' (check your API key)' : res.status === 429 ? ' (rate limit or quota reached)' : '';
-  throw new Error(`${res.status}${hint} — ${String(msg).slice(0, 500)}`);
+  const raw = String(msg).slice(0, 500);
+  // OpenRouter's ZDR refusal is an account setting, not a request bug: the per-request
+  // `zdr` flag can only tighten routing, never override an account-wide or guardrail rule.
+  if (/zero data retention|\bZDR\b/i.test(raw)) throw new Error(ZDR_HINT);
+  throw new Error(`${res.status}${hint} — ${raw}`);
 }
+const ZDR_HINT = 'OpenRouter blocked this request: your account enforces Zero Data Retention, and no endpoint for this model is ZDR-eligible. Almost no image or video models qualify — video never does.\n\nFix: openrouter.ai/settings/privacy → turn off the Zero Data Retention toggle(s), then retry. That lets providers store requests, so only do this if you are fine with that.\n\nOr switch provider for this mode (Settings → pick a model): a direct OpenAI or Gemini key has no ZDR gate.';
 async function* sse(res) {
   const reader = res.body.getReader(), dec = new TextDecoder(); let buf = '';
   while (true) {
@@ -837,7 +842,7 @@ function msgHTML(m) {
   if (m.media?.length) h += `<div class="media">${m.media.map(mediaHTML).join('')}</div>`;
   if (m.sources?.length && !m.pending) h += `<div class="sources"><span>📚</span>${m.sources.map(x => `<button class="chip sm" data-act="source" data-n="${x.n}" title="${esc(x.text.slice(0, 200))}">[${x.n}] ${esc(x.doc)}${x.page ? ' · ' + esc(x.page) : ''}</button>`).join('')}</div>`;
   if (m.pending && (!m.text || m.status)) h += `<div class="status"><span class="dots"><i></i><i></i><i></i></span>${esc(m.status || '')}</div>`;
-  if (m.error) h += `<div class="error">⚠️ ${esc(m.error)}</div>`;
+  if (m.error) h += `<div class="error">${linkify(esc(m.error))}</div>`;
   if (!m.pending) {
     const speakBtn = m.text ? `<button data-act="speak" title="Read aloud" aria-label="Read aloud" class="${speakingId === m.id ? 'on' : ''}">${speakingId === m.id ? '⏹' : '🔊'}</button>` : '';
     h += u
@@ -847,6 +852,10 @@ function msgHTML(m) {
   return h + '</div></div>';
 }
 const EXT = { javascript: 'js', js: 'js', typescript: 'ts', ts: 'ts', python: 'py', py: 'py', html: 'html', css: 'css', json: 'json', bash: 'sh', sh: 'sh', shell: 'sh', java: 'java', c: 'c', cpp: 'cpp', csharp: 'cs', go: 'go', rust: 'rs', php: 'php', ruby: 'rb', sql: 'sql', yaml: 'yml', xml: 'xml', markdown: 'md', kotlin: 'kt', swift: 'swift' };
+/** Turn bare URLs inside already-escaped error text into links. */
+function linkify(escaped) {
+  return escaped.replace(/(https:\/\/[^\s<]+[^\s<.,;:)\]])/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+}
 function linkCitations(el, n) {
   const walker = document.createTreeWalker(el.querySelector('.bubble > .md') || el, NodeFilter.SHOW_TEXT);
   const nodes = []; let t; while ((t = walker.nextNode())) if (/\[\d+\]/.test(t.nodeValue) && !t.parentElement.closest('pre,code,a')) nodes.push(t);
